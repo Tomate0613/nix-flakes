@@ -27,6 +27,7 @@
           default = pkgs.mkShell {
             packages = with pkgs; [
               jdk21
+              jetbrains.jdk
             ];
 
             __GL_THREADED_OPTIMIZATIONS = 0;
