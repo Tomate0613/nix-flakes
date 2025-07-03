@@ -26,7 +26,6 @@
         {
           default = pkgs.mkShell {
             packages = with pkgs; [
-              jdk21
               jetbrains.jdk
             ];
 
