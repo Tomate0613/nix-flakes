@@ -22,11 +22,18 @@
             inherit system;
             config.allowUnfree = true;
           };
+          setup = pkgs.writeShellApplication {
+            name = "setup-intellij";
+
+            runtimeInputs = with pkgs; [ xmlstarlet ];
+            text = "${./setup-intellij.sh}";
+          };
         in
         {
           default = pkgs.mkShell {
             packages = with pkgs; [
               jetbrains.jdk
+              setup
             ];
 
             __GL_THREADED_OPTIMIZATIONS = 0;
