@@ -18,7 +18,7 @@ if [ -z "$JAVA_BIN" ] || [ ! -x "$JAVA_BIN" ]; then
 fi
 
 # Mixin library
-MIXIN_JAR=$(find ~/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/ -name "*.jar" | head -n1)
+MIXIN_JAR=$(find ~/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/ -name "*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" | head -n1)
 
 if [ -z "$MIXIN_JAR" ]; then
   echo "No mixin jar found. Build project first"
