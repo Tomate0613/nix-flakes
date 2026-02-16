@@ -5,8 +5,31 @@
   pkgs,
   buildDependencies,
   nativeBuildInputs,
+  system,
 }:
 let
+  shouldSkip =
+    v:
+    let
+      systemParts = lib.splitString "-" system;
+      cpuMap = {
+        x86_64 = "x64";
+        i686 = "ia32";
+        aarch64 = "arm64";
+        ppc64 = "ppc64";
+      };
+      osMap = {
+        linux = "linux";
+        darwin = "darwin";
+        windows = "win32";
+        aix = "aix";
+      };
+      currentCpu = cpuMap.${builtins.elemAt systemParts 0};
+      currentOs = osMap.${builtins.elemAt systemParts 1};
+      osMatches = v ? os && builtins.elem currentOs v.os;
+      cpuMatches = v ? cpu && builtins.elem currentCpu v.cpu;
+    in
+    (v ? os && !osMatches) || (v ? cpu && !cpuMatches);
   splitVersion = name: lib.splitString "@" (lib.head (lib.splitString "(" name));
   getVersion = name: lib.last (splitVersion name);
   withoutVersion = name: lib.concatStringsSep "@" (lib.init (splitVersion name));
@@ -94,16 +117,18 @@ let
   findBuiltTarball =
     n: v:
     if lib.elem (withoutVersion n) buildDependencies then
-      mkTarball n (pkgs.callPackage ./derivation.nix rec {
-        src = unpackTarball (findTarball n v) "${n}-unpacked";
-        lockFile = src + /pnpm-lock.yaml;
+      mkTarball n (
+        pkgs.callPackage ./derivation.nix rec {
+          src = unpackTarball (findTarball n v) "${n}-unpacked";
+          lockFile = src + /pnpm-lock.yaml;
 
-        inherit nativeBuildInputs;
-        inherit buildDependencies;
+          inherit nativeBuildInputs;
+          inherit buildDependencies;
 
-        pname = withoutVersion n;
-        version = getVersion n;
-      })
+          pname = withoutVersion n;
+          version = getVersion n;
+        }
+      )
     else
       findTarball n v;
 in
@@ -112,8 +137,13 @@ lockFile
   packages = lib.mapAttrs (
     n: v:
     v
-    // {
-      resolution.tarball = "file:${findBuiltTarball n v}";
-    }
+    // (
+      if shouldSkip v then
+        { }
+      else
+        {
+          resolution.tarball = "file:${findBuiltTarball n v}";
+        }
+    )
   ) lockFile.packages;
 }

@@ -29,6 +29,8 @@ pkgs.stdenv.mkDerivation (
       inherit buildDependencies;
       inherit nativeBuildInputs;
       lockFile = parsedLockfile;
+
+      system = pkgs.stdenv.hostPlatform.system;
     };
     patchedLockfileYaml = pkgs.writeText "pnpm-lock.yaml" (lib.toJSON patchedLockfile);
   in
@@ -51,8 +53,6 @@ pkgs.stdenv.mkDerivation (
 
       configurePhase = ''
         export HOME=$(mktemp -d)
-
-        ls
 
         runHook preConfigure
 
