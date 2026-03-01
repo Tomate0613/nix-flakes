@@ -32,6 +32,7 @@
         {
           default = pkgs.mkShell {
             packages = with pkgs; [
+              jdk25
               jetbrains.jdk
               setup
             ];
