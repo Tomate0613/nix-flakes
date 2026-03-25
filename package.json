@@ -1,0 +1,12 @@
+{
+  "name": "spyglassmc-language-server",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build_": "mkdir build && ln -s node_modules/.bin/spyglassmc-language-server build/",
+    "build__": "mkdir build"
+  },
+  "dependencies": {
+    "@spyglassmc/language-server": "^0.4.56"
+  }
+}
