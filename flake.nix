@@ -43,12 +43,16 @@
               hash = "sha256-ARYSN8f4g10oLN7G3NL0XIIeDGmgI4Ptzt0nf1WnI34=";
             };
 
-            nativeBuildInputs = [ pkgs.autoPatchelfHook ];
+            nativeBuildInputs = with pkgs; [
+              autoPatchelfHook
+              wrapGAppsHook3
+            ];
 
             buildInputs = with pkgs; [
               (lib.getLib stdenv.cc.cc)
               glib
               gtk3
+              gsettings-desktop-schemas
               makeWrapper
             ];
 
@@ -64,9 +68,15 @@
               cp -r * $out/opt/jmc
 
               mkdir -p $out/bin
-
               makeWrapper $out/opt/jmc/"JDK Mission Control"/jmc $out/bin/jmc \
-                --set LD_LIBRARY_PATH "${lib.makeLibraryPath (with pkgs; [ glib ])}"
+                --set LD_LIBRARY_PATH "${
+                  lib.makeLibraryPath (
+                    with pkgs;
+                    [
+                      glib
+                    ]
+                  )
+                }"
             '';
           };
 
