@@ -58,10 +58,10 @@ pkgs.stdenv.mkDerivation (
 
         cp -fv ${patchedLockfileYaml} pnpm-lock.yaml
 
-        store=$(pnpm --pm-on-fail warn store path)
+        store=$(pnpm --trust-lockfile --pm-on-fail warn store path)
         mkdir -p $(dirname $store)
 
-        ${lib.optionalString runScripts "pnpm run --if-present preinstall"}
+        ${lib.optionalString runScripts "pnpm run --trust-lockfile --if-present preinstall"}
 
         echo "Installing"
         pnpm install \
@@ -72,7 +72,7 @@ pkgs.stdenv.mkDerivation (
           --fetch-retries 0 \
           --trust-lockfile
 
-        ${lib.optionalString runScripts "pnpm --pm-on-fail warn run --if-present postinstall"}
+        ${lib.optionalString runScripts "pnpm --trust-lockfile --pm-on-fail warn run --if-present postinstall"}
 
         runHook postConfigure
       '';
@@ -82,13 +82,13 @@ pkgs.stdenv.mkDerivation (
 
         ${
           if buildCommand != null then
-            "pnpm --pm-on-fail warn run ${buildCommand}"
+            "pnpm --trust-lockfile --pm-on-fail warn run ${buildCommand}"
           else
             "
-            pnpm --pm-on-fail warn run --if-present prepare
-            pnpm --pm-on-fail warn run --if-present prebuild
-            pnpm --pm-on-fail warn run --if-present build
-            pnpm --pm-on-fail warn run --if-present prepublishOnly
+            pnpm --trust-lockfile --pm-on-fail warn run --if-present prepare
+            pnpm --trust-lockfile --pm-on-fail warn run --if-present prebuild
+            pnpm --trust-lockfile --pm-on-fail warn run --if-present build
+            pnpm --trust-lockfile --pm-on-fail warn run --if-present prepublishOnly
           "
         }
 
