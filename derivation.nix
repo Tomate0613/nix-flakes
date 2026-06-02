@@ -58,7 +58,7 @@ pkgs.stdenv.mkDerivation (
 
         cp -fv ${patchedLockfileYaml} pnpm-lock.yaml
 
-        store=$(pnpm --trust-lockfile --pm-on-fail warn store path)
+        store=$(pnpm --pm-on-fail warn store path)
         mkdir -p $(dirname $store)
 
         ${lib.optionalString runScripts "pnpm run --trust-lockfile --if-present preinstall"}
