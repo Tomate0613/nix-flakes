@@ -61,6 +61,7 @@ pkgs.stdenv.mkDerivation (
         store=$(pnpm store path)
         mkdir -p $(dirname $store)
 
+        pnpm --version
         pnpm config set pmOnFail warn
 
         ${lib.optionalString runScripts "pnpm run --if-present preinstall"}
