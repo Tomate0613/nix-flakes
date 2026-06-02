@@ -63,6 +63,7 @@ pkgs.stdenv.mkDerivation (
 
         ${lib.optionalString runScripts "pnpm run --if-present preinstall"}
 
+        echo "Installing"
         pnpm install \
           --ignore-scripts \
           --frozen-lockfile \
