@@ -68,7 +68,8 @@ pkgs.stdenv.mkDerivation (
           --frozen-lockfile \
           --offline \
           --pm-on-fail warn \
-          --fetch-retries 0
+          --fetch-retries 0 \
+          --trust-lockfile
 
         ${lib.optionalString runScripts "pnpm --pm-on-fail warn run --if-present postinstall"}
 
