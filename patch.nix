@@ -54,7 +54,7 @@ let
     tarball: outdir:
     pkgs.runCommand outdir { } ''
       mkdir -p $out
-      tar -xzf ${tarball} -C $out
+      tar -xzf ${tarball} --strip-components=1 -C $out
     '';
   findTarball =
     n: v:
