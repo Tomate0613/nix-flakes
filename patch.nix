@@ -4,8 +4,8 @@
   registry,
   pkgs,
   buildDependencies,
-  nativeBuildInputs,
   system,
+  attrs,
 }:
 let
   shouldSkip =
@@ -122,11 +122,15 @@ let
           src = unpackTarball (findTarball n v) "${n}-unpacked";
           lockFile = src + /pnpm-lock.yaml;
 
-          inherit nativeBuildInputs;
-          inherit buildDependencies;
-
           pname = withoutVersion n;
           version = getVersion n;
+
+          inherit (attrs)
+            nativeBuildInputs
+            buildInputs
+            registry
+            buildDependencies
+            ;
         }
       )
     else

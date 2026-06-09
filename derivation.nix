@@ -8,7 +8,6 @@
   version,
   nativeBuildInputs ? [ ],
   buildInputs ? [ ],
-  preBuild ? null,
   registry ? "https://registry.npmjs.org",
   buildDependencies ? [ ],
   buildCommand ? null,
@@ -27,7 +26,15 @@ pkgs.stdenv.mkDerivation (
       inherit lib;
       inherit registry;
       inherit buildDependencies;
-      inherit nativeBuildInputs;
+      attrs = {
+        inherit
+          nativeBuildInputs
+          buildInputs
+          registry
+          buildDependencies
+          ;
+      };
+
       lockFile = parsedLockfile;
 
       system = pkgs.stdenv.hostPlatform.system;
@@ -42,7 +49,6 @@ pkgs.stdenv.mkDerivation (
         version
         nativeBuildInputs
         buildInputs
-        preBuild
         ;
 
       strictDeps = true;
