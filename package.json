@@ -7,6 +7,6 @@
     "build__": "mkdir build"
   },
   "dependencies": {
-    "@spyglassmc/language-server": "^0.4.56"
+    "@spyglassmc/language-server": "^0.4.60"
   }
 }

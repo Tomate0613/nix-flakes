@@ -29,7 +29,7 @@
 
             src = ./.;
 
-            npmDepsHash = "sha256-bnSHIcyAkjEoILcoad85m4onsim31OmwGH3bkbDnjXg=";
+            npmDepsHash = "sha256-9lNfRdUqBn/uYCvbjWRnDBgCDxgM7ON7pC296yKc8fk=";
             npmDepsFetcherVersion = 2;
 
             dontNpmBuild = true;
