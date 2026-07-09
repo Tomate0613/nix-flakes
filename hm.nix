@@ -20,10 +20,11 @@ let
     _: v: (v.enable || false) || (v.installOnly || false)
   ) cfg.servers;
 
-  packages = lib.flatten (lib.mapAttrsToList (name: _: db.${name}) installedServers);
+  packages = lib.flatten (lib.mapAttrsToList (name: _: db.${name}.packages) installedServers);
 
   lua = lib.concatStringsSep "\n" (
     lib.mapAttrsToList (name: _: ''
+      ${db.${name}.config or ""}
       vim.lsp.enable("${name}")
     '') enabledServers
   );
