@@ -23,9 +23,9 @@ let
   packages = lib.flatten (lib.mapAttrsToList (name: _: db.${name}.packages) installedServers);
 
   lua = lib.concatStringsSep "\n" (
-    lib.mapAttrsToList (name: _: ''
+    lib.mapAttrsToList (name: v: ''
       ${db.${name}.config or ""}
-      vim.lsp.enable("${name}")
+      ${if v.skipEnable then "" else "vim.lsp.enable(\"${name}\")"}
     '') enabledServers
   );
 
@@ -42,7 +42,7 @@ in
           options = {
             enable = lib.mkEnableOption "Enable the language server";
 
-            installOnly = lib.mkOption {
+            skipEnable = lib.mkOption {
               type = lib.types.bool;
               default = false;
             };
