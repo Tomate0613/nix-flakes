@@ -7,7 +7,7 @@
 }:
 
 let
-  cfg = config.programs.nvim-lsp;
+  cfg = config.programs.neovim.bridge;
 
   db = import ./servers.nix {
     inherit inputs;
@@ -20,7 +20,9 @@ let
     _: v: (v.enable || false) || (v.installOnly || false)
   ) cfg.servers;
 
-  packages = lib.flatten (lib.mapAttrsToList (name: _: db.${name}.packages) installedServers) ++ cfg.extraPackages;
+  packages =
+    lib.flatten (lib.mapAttrsToList (name: _: db.${name}.packages) installedServers)
+    ++ cfg.extraPackages;
 
   lua = lib.concatStringsSep "\n" (
     lib.mapAttrsToList (name: v: ''
@@ -30,10 +32,12 @@ let
   );
 
   lspBinPath = lib.makeBinPath packages;
+
+  luaConstants = lib.generators.toLua { } cfg.constants;
 in
 {
-  options.programs.nvim-lsp = {
-    enable = lib.mkEnableOption "Generate Neovim LSP configuration";
+  options.programs.neovim.bridge = {
+    enable = lib.mkEnableOption "Enable Neovim bridge configuration";
 
     servers = lib.mkOption {
       default = { };
@@ -55,6 +59,11 @@ in
       type = lib.types.listOf lib.types.package;
       default = [ ];
     };
+
+    constants = lib.mkOption {
+      type = lib.types.attrsOf lib.types.anything;
+      default = { };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -65,5 +74,8 @@ in
     ''
     + lua;
 
+    xdg.configFile."nvim/lua/generated/constants.lua".text = ''
+      return ${luaConstants}
+    '';
   };
 }
