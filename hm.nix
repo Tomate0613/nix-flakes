@@ -20,7 +20,7 @@ let
     _: v: (v.enable || false) || (v.installOnly || false)
   ) cfg.servers;
 
-  packages = lib.flatten (lib.mapAttrsToList (name: _: db.${name}.packages) installedServers);
+  packages = lib.flatten (lib.mapAttrsToList (name: _: db.${name}.packages) installedServers) ++ cfg.extraPackages;
 
   lua = lib.concatStringsSep "\n" (
     lib.mapAttrsToList (name: v: ''
@@ -49,6 +49,11 @@ in
           };
         }
       );
+    };
+
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
     };
   };
 
