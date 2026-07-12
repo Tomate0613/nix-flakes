@@ -525,7 +525,7 @@ with pkgs;
     packages = [ lua-language-server ];
   };
   luau_lsp = {
-    packages = [ ];
+    packages = [ luau-lsp ];
   };
   lwc_ls = {
     packages = [ ];
