@@ -21,13 +21,13 @@ with pkgs;
     command = "${ast-grep}/bin/ast-grep";
   };
   astyle = {
-    command = "";
+    command = "${astyle}/bin/astyle";
   };
   autocorrect = {
-    command = "";
+    command = "${autocorrect}/bin/autocorrect";
   };
   autoflake = {
-    command = "";
+    command = "${autoflake}/bin/autoflake";
   };
   auto_optional = {
     command = "";
@@ -36,7 +36,7 @@ with pkgs;
     command = "";
   };
   awk = {
-    command = "";
+    command = "${gawk}/bin/awk";
   };
   bake = {
     command = "";
@@ -246,7 +246,7 @@ with pkgs;
     command = "";
   };
   gleam = {
-    command = "";
+    command = "${gleam}/bin/gleam";
   };
   gluon_fmt = {
     command = "";
