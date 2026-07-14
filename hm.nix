@@ -9,7 +9,12 @@
 let
   cfg = config.programs.neovim.bridge;
 
-  db = import ./servers.nix {
+  servers = import ./servers.nix {
+    inherit inputs;
+    system = pkgs.system;
+  };
+
+  formatters = import ./formatters.nix {
     inherit inputs;
     system = pkgs.system;
   };
@@ -21,15 +26,38 @@ let
   ) cfg.servers;
 
   packages =
-    lib.flatten (lib.mapAttrsToList (name: _: db.${name}.packages) installedServers)
+    lib.flatten (lib.mapAttrsToList (name: _: servers.${name}.packages) installedServers)
     ++ cfg.extraPackages;
 
-  lua = lib.concatStringsSep "\n" (
+  selectedFormatters =
+    lib.unique (lib.flatten (lib.attrValues cfg.formatters));
+
+  usedFormatterDefinitions =
+    lib.filterAttrs (
+      name: _: builtins.elem name selectedFormatters
+    ) formatters;
+
+  lspLua = lib.concatStringsSep "\n" (
     lib.mapAttrsToList (name: v: ''
-      ${db.${name}.config or ""}
+      ${servers.${name}.config or ""}
       ${if v.skipEnable then "" else "vim.lsp.enable(\"${name}\")"}
     '') enabledServers
   );
+
+  conformLua =
+    let
+      formatterDefinitions =
+        lib.generators.toLua { } usedFormatterDefinitions;
+
+      formattersByFt =
+        lib.generators.toLua { } cfg.formatters;
+    in
+    ''
+      return {
+        formatters = ${formatterDefinitions};
+        formatters_by_ft = ${formattersByFt};
+      }
+    '';
 
   lspBinPath = lib.makeBinPath packages;
 
@@ -55,6 +83,19 @@ in
       );
     };
 
+    formatters = lib.mkOption {
+      default = { };
+
+      type = lib.types.attrsOf (
+        lib.types.listOf lib.types.str
+      );
+
+      description = ''
+        Formatters by filetype. Values are conform.nvim formatter names.
+      '';
+    };
+
+
     extraPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [ ];
@@ -67,15 +108,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    xdg.configFile."nvim/lua/generated/path.lua".text = "vim.env.PATH = \"${lspBinPath}:\" .. vim.env.PATH";
 
-    xdg.configFile."nvim/lua/generated/lsp.lua".text = ''
-      vim.env.PATH = "${lspBinPath}:" .. vim.env.PATH
+    xdg.configFile."nvim/lua/generated/lsp.lua".text = lspLua;
 
-    ''
-    + lua;
+    xdg.configFile."nvim/lua/generated/conform.lua".text = conformLua;
 
-    xdg.configFile."nvim/lua/generated/constants.lua".text = ''
-      return ${luaConstants}
-    '';
+    xdg.configFile."nvim/lua/generated/constants.lua".text = "return ${luaConstants}";
   };
 }
