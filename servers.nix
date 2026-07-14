@@ -12,19 +12,19 @@ with pkgs;
     packages = [ ];
   };
   aiken = {
-    packages = [ ];
+    packages = [ aiken ];
   };
   air = {
-    packages = [ ];
+    packages = [ air-formatter ];
   };
   alloy_ls = {
-    packages = [ ];
+    packages = [ alloy ];
   };
   anakin_language_server = {
     packages = [ ];
   };
   angularls = {
-    packages = [ ];
+    packages = [ angular-language-server ];
   };
   ansiblels = {
     packages = [ ansible-language-server ];
@@ -42,13 +42,13 @@ with pkgs;
     packages = [ asm-lsp ];
   };
   ast_grep = {
-    packages = [ ];
+    packages = [ ast-grep ];
   };
   astro = {
     packages = [ nodePackages."@astrojs/language-server" ];
   };
   atlas = {
-    packages = [ ];
+    packages = [ atlas ];
   };
   autohotkey_lsp = {
     packages = [ ];
@@ -57,7 +57,7 @@ with pkgs;
     packages = [ autotools-language-server ];
   };
   awk_ls = {
-    packages = [ ];
+    packages = [ awk-language-server ];
   };
   azure_pipelines_ls = {
     packages = [ ];
@@ -252,7 +252,7 @@ with pkgs;
     packages = [ dot-language-server ];
   };
   dprint = {
-    packages = [ ];
+    packages = [ dprint ];
   };
   drools_lsp = {
     packages = [ ];
@@ -285,7 +285,7 @@ with pkgs;
     packages = [ ];
   };
   ember = {
-    packages = [ ];
+    packages = [ ember-language-server ];
   };
   emmet_language_server = {
     packages = [ ];
@@ -344,6 +344,7 @@ with pkgs;
   futhark_lsp = {
     packages = [ futhark ];
   };
+  # This one does not even need any packages
   gdscript = {
     packages = [ ];
   };
@@ -438,7 +439,7 @@ with pkgs;
     packages = [ vscode-langservers-extracted ];
   };
   htmx = {
-    packages = [ ];
+    packages = [ htmx-lsp ];
   };
   hydra_lsp = {
     packages = [ ];
@@ -534,7 +535,7 @@ with pkgs;
     packages = [ ];
   };
   markdown_oxide = {
-    packages = [ ];
+    packages = [ markdown-oxide ];
   };
   marko-js = {
     packages = [ ];
@@ -708,7 +709,7 @@ with pkgs;
     packages = [ postgres-lsp ];
   };
   powershell_es = {
-    packages = [ ];
+    packages = [ powershell ];
   };
   prismals = {
     packages = [ nodePackages."@prisma/language-server" ];
@@ -938,7 +939,7 @@ with pkgs;
     packages = [ rubyPackages.syntax_tree ];
   };
   systemd_ls = {
-    packages = [ ];
+    packages = [ systemd-lsp ];
   };
   tabby_ml = {
     packages = [ ];
