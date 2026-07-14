@@ -29,13 +29,11 @@ let
     lib.flatten (lib.mapAttrsToList (name: _: servers.${name}.packages) installedServers)
     ++ cfg.extraPackages;
 
-  selectedFormatters =
-    lib.unique (lib.flatten (lib.attrValues cfg.formatters));
+  selectedFormatters = lib.unique (lib.flatten (lib.attrValues cfg.formatters));
 
-  usedFormatterDefinitions =
-    lib.filterAttrs (
-      name: _: builtins.elem name selectedFormatters
-    ) formatters;
+  usedFormatterDefinitions = lib.filterAttrs (
+    name: _: builtins.elem name selectedFormatters
+  ) formatters;
 
   lspLua = lib.concatStringsSep "\n" (
     lib.mapAttrsToList (name: v: ''
@@ -46,11 +44,9 @@ let
 
   conformLua =
     let
-      formatterDefinitions =
-        lib.generators.toLua { } usedFormatterDefinitions;
+      formatterDefinitions = lib.generators.toLua { } usedFormatterDefinitions;
 
-      formattersByFt =
-        lib.generators.toLua { } cfg.formatters;
+      formattersByFt = lib.generators.toLua { } cfg.formatters;
     in
     ''
       return {
@@ -86,15 +82,12 @@ in
     formatters = lib.mkOption {
       default = { };
 
-      type = lib.types.attrsOf (
-        lib.types.listOf lib.types.str
-      );
+      type = lib.types.attrsOf (lib.types.listOf lib.types.str);
 
       description = ''
         Formatters by filetype. Values are conform.nvim formatter names.
       '';
     };
-
 
     extraPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
@@ -108,7 +101,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    xdg.configFile."nvim/lua/generated/path.lua".text = "vim.env.PATH = \"${lspBinPath}:\" .. vim.env.PATH";
+    xdg.configFile."nvim/lua/generated/path.lua".text =
+      "vim.env.PATH = \"${lspBinPath}:\" .. vim.env.PATH";
 
     xdg.configFile."nvim/lua/generated/lsp.lua".text = lspLua;
 
