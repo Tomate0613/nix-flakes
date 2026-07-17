@@ -1083,6 +1083,8 @@ with pkgs;
         configNamespace = "typescript",
       }
 
+      local tsserver_filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' }
+
       vim.lsp.config("vtsls", {
         settings = {
           vtsls = {
@@ -1093,6 +1095,7 @@ with pkgs;
             },
           },
         },
+        filetypes = tsserver_filetypes,
       })
 
       vim.lsp.config("ts_ls", {
@@ -1101,6 +1104,7 @@ with pkgs;
             vue_plugin,
           },
         },
+        filetypes = tsserver_filetypes,
       })
     '';
   };
