@@ -44,6 +44,7 @@
                 (lib.getLib stdenv.cc.cc)
 
                 ## native versions
+                sdl3
                 glfw3-minecraft
                 openal
 
@@ -64,6 +65,8 @@
                 udev # oshi
 
                 flite # Text to speech (Otherwise minecraft will log an error every time it launches)
+
+                vulkan-loader
               ]
             );
           };
