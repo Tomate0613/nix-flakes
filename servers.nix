@@ -274,7 +274,7 @@ with pkgs;
   };
   elixirls = {
     packages = [
-      elixir_ls
+      elixir-ls
       beamPackages.hex
     ];
   };
@@ -1012,6 +1012,9 @@ with pkgs;
   };
   twiggy_language_server = {
     packages = [ ];
+  };
+  ty = {
+    packages = [ ty ];
   };
   typeprof = {
     packages = [ ];
