@@ -68,6 +68,8 @@ pkgs.stdenv.mkDerivation (
         mkdir -p $(dirname $store)
 
         pnpm config set minimumReleaseAge 0
+        pnpm config set trustLockfile true
+        pnpm config set blockExoticSubdeps false
 
         ${lib.optionalString runScripts "pnpm run --if-present preinstall"}
 
@@ -77,8 +79,7 @@ pkgs.stdenv.mkDerivation (
           --frozen-lockfile \
           --offline \
           --pm-on-fail warn \
-          --fetch-retries 0 \
-          --trust-lockfile
+          --fetch-retries 0
 
         ${lib.optionalString runScripts "pnpm --pm-on-fail warn run --if-present postinstall"}
 
