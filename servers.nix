@@ -179,7 +179,7 @@ with pkgs;
   csharp_ls = {
     packages = [
       csharp-ls
-      dotnet-sdk
+      dotnet-sdk_10
     ];
   };
   css_variables = {
