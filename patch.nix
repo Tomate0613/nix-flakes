@@ -4,14 +4,14 @@
   registry,
   pkgs,
   buildDependencies,
-  system,
   attrs,
 }:
 let
   shouldSkip =
     v:
     let
-      systemParts = lib.splitString "-" system;
+      # TODO Allow for cross compilation, we do not know if a package is used as dependency or devDependency here, not skipping it if its either on the host or build platform is most likely best option
+      systemParts = lib.splitString "-" pkgs.stdenv.hostPlatform.system;
       cpuMap = {
         x86_64 = "x64";
         i686 = "ia32";
@@ -26,10 +26,13 @@ let
       };
       currentCpu = cpuMap.${builtins.elemAt systemParts 0};
       currentOs = osMap.${builtins.elemAt systemParts 1};
+      currentLibc = pkgs.stdenv.hostPlatform.libc;
+
       osMatches = v ? os && builtins.elem currentOs v.os;
       cpuMatches = v ? cpu && builtins.elem currentCpu v.cpu;
+      libcMatches = v ? libc && builtins.elem currentLibc v.libc;
     in
-    (v ? os && !osMatches) || (v ? cpu && !cpuMatches);
+    (v ? os && !osMatches) || (v ? cpu && !cpuMatches) || (v ? libc && !libcMatches);
   splitVersion = name: lib.splitString "@" (lib.head (lib.splitString "(" name));
   getVersion = name: lib.last (splitVersion name);
   withoutVersion = name: lib.concatStringsSep "@" (lib.init (splitVersion name));

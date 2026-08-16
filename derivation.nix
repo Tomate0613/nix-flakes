@@ -36,8 +36,6 @@ pkgs.stdenv.mkDerivation (
       };
 
       lockFile = parsedLockfile;
-
-      system = pkgs.stdenv.hostPlatform.system;
     };
     patchedLockfileYaml = pkgs.writeText "pnpm-lock.yaml" (lib.toJSON patchedLockfile);
   in
