@@ -68,7 +68,6 @@ pkgs.stdenv.mkDerivation (
         pnpm config set minimumReleaseAge 0
         pnpm config set trustLockfile true
         pnpm config set blockExoticSubdeps false
-        pnpm config set managePackageManagerVersions false
 
         ${lib.optionalString runScripts "pnpm run --if-present preinstall"}
 
