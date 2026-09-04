@@ -369,7 +369,10 @@ with pkgs;
     command = "";
   };
   lua-format = {
-    command = "";
+    command = "${luaformatter}/bin/lua-format";
+  };
+  luafmt = {
+    command = "${emmylua-formatter}/bin/luafmt";
   };
   mago_format = {
     command = "";
