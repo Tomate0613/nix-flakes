@@ -2,6 +2,7 @@
 let
   pkgs = inputs.nixpkgs.legacyPackages."${system}";
   fp = input: input.package."${system}".default;
+  exe = pkgs.lib.getExe;
 in
 with pkgs;
 {
@@ -576,7 +577,7 @@ with pkgs;
     command = "";
   };
   ruff = {
-    command = "";
+    command = exe ruff;
   };
   ruff_fix = {
     command = "";
